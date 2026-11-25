@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>讓聲｜共用樂譜</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="audio.js"></script>
+  <script defer src="rules.js"></script>
+  <script defer src="sensors.js"></script>
+  <script defer src="score.js"></script>
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <main class="stage">
+    <header class="masthead">
+      <div>
+        <h1>讓聲<span class="title-point" aria-hidden="true"></span></h1>
+        <p class="subtitle">你留多少拍，下一個人就能接多少拍。</p>
+      </div>
+      <div class="setup">
+        <div class="modes" role="group" aria-label="演出模式">
+          <button id="solo" type="button" aria-pressed="true">單人</button>
+          <button id="group" type="button" aria-pressed="false">共奏</button>
+        </div>
+        <label class="palette">音階
+          <select id="palette" aria-label="音階">
+            <option value="minor">D 小調五聲</option>
+            <option value="major">C 大調五聲</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <section class="notation" aria-labelledby="score-title">
+      <div class="notation-head">
+        <div>
+          <h2 id="score-title">共用八拍譜</h2>
+          <p id="edit-hint">拖過格子畫旋律，同一拍可疊三個音。</p>
+        </div>
+        <div class="edit modes" role="group" aria-label="畫譜聲部">
+          <button type="button" id="edit-a" aria-pressed="true"><span class="mark mark-a" aria-hidden="true"></span>畫主句</button>
+          <button type="button" id="edit-b" aria-pressed="false" disabled><span class="mark mark-b" aria-hidden="true"></span>畫回應</button>
+        </div>
+      </div>
+
+      <div class="score-scroll">
+        <div class="score-shell">
+          <div class="score-header" id="score-header" aria-hidden="true"></div>
+          <div class="score-body" id="score" aria-label="音高與拍子的畫譜區"></div>
+          <div class="split-container">
+            <label for="boundary">交接線</label>
+            <div class="split-track" id="split-track">
+              <input id="boundary" type="range" min="0" max="8" value="5" aria-describedby="share">
+              <span class="split-knob" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="score-footer">
+        <div id="share"><b id="lead-count">主句 5 拍</b><span id="answer-count">回應 3 拍</span></div>
+        <span id="relation" role="status">請啟用音訊</span>
+      </div>
+    </section>
+
+    <section class="inputs" aria-label="共奏的不同入口">
+      <article class="input-card">
+        <h2><span class="mark mark-a" aria-hidden="true"></span>畫譜</h2>
+        <p>橫向安排拍子，縱向選音。再點已畫的格子可擦除。</p>
+        <button type="button" id="example">載入範例</button>
+        <button type="button" id="reset">清空樂譜</button>
+      </article>
+      <article class="input-card">
+        <h2><span class="mark mark-b" aria-hidden="true"></span>哼唱</h2>
+        <p id="hum-hint">在回應拍子哼住一個音，合成音跟隨音高。</p>
+        <button type="button" id="mic">開啟麥克風</button>
+        <output id="mic-reading" aria-label="哼唱音高" class="reading">—</output>
+      </article>
+      <article class="input-card camera-card">
+        <div>
+          <h2><span class="mark mark-c" aria-hidden="true"></span>手勢</h2>
+          <p id="cam-hint">用手進入畫面，往右選高音，移開就留白。</p>
+          <button type="button" id="cam">開啟鏡頭</button>
+          <button type="button" id="calibrate" hidden>校準背景</button>
+          <output id="cam-reading" aria-label="手勢音高" class="reading">—</output>
+        </div>
+        <div id="camera-view" class="camera-view" hidden>
+          <video id="video" muted playsinline aria-label="鏡頭手勢預覽"></video>
+          <span id="camera-zone" aria-hidden="true"></span>
+        </div>
+      </article>
+    </section>
+
+    <footer class="controls">
+      <div class="transport">
+        <button id="enable" type="button">啟用音訊</button>
+        <button id="play" type="button" disabled>開始合奏</button>
+        <button id="stop" type="button" title="也可按 Esc" disabled>停止</button>
+      </div>
+      <div class="volume">
+        <label for="volume">音量</label>
+        <input id="volume" type="range" min="0" max="100" value="40">
+        <output id="volume-value" for="volume">40%</output>
+      </div>
+      <p id="audio-message" role="status" class="audio-message" hidden></p>
+    </footer>
+  </main>
+</body>
+</html>
